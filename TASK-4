@@ -1,0 +1,45 @@
+const int lightButton = 6;  
+const int fanButton = 7;  
+const int relay1 = 4;  // Simulated Light Control  
+const int relay2 = 5;  // Simulated Fan Control  
+
+int lastLightState = HIGH;
+int lastFanState = HIGH;
+int lightState = LOW;
+int fanState = LOW;
+
+void setup() {
+    Serial.begin(9600);  // Virtual Terminal in Wokwi
+    pinMode(lightButton, INPUT_PULLUP);
+    pinMode(fanButton, INPUT_PULLUP);
+    pinMode(relay1, OUTPUT);
+    pinMode(relay2, OUTPUT);
+    digitalWrite(relay1, LOW);
+    digitalWrite(relay2, LOW);
+
+    Serial.println("🔊 Speech Recognition Simulation Started...");
+    Serial.println("✅ Press Button 1 for Light ON/OFF");
+    Serial.println("✅ Press Button 2 for Fan ON/OFF");
+}
+
+void loop() {
+    int currentLightState = digitalRead(lightButton);
+    int currentFanState = digitalRead(fanButton);
+
+    // Toggle Light when Button is Pressed
+    if (currentLightState == LOW && lastLightState == HIGH) {  
+        lightState = !lightState;  // Toggle State
+        digitalWrite(relay1, lightState);
+        Serial.println(lightState ? "💡 Light ON" : "💡 Light OFF");
+    }
+
+    // Toggle Fan when Button is Pressed
+    if (currentFanState == LOW && lastFanState == HIGH) {  
+        fanState = !fanState;  // Toggle State
+        digitalWrite(relay2, fanState);
+        Serial.println(fanState ? "🌬 Fan ON" : "🌬 Fan OFF");
+    }
+
+    lastLightState = currentLightState;
+    lastFanState = currentFanState;
+}
